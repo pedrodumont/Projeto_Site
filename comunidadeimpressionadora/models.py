@@ -1,4 +1,4 @@
-from main import database, app
+from comunidadeimpressionadora import database
 from datetime import datetime, timezone
 
 def get_utc_now():
@@ -21,7 +21,7 @@ class Post(database.Model):
     id_usuario = database.Column(database.Integer, database.ForeignKey('usuario.id'), nullable=False)
 
 if __name__ == '__main__':
+    from comunidadeimpressionadora import app
     with app.app_context():
-        # database.drop_all()
         database.create_all()
     print('Banco criado!')
