@@ -1,5 +1,7 @@
 from flask import Flask, render_template, url_for, request, flash, redirect
 from forms import FormCriarConta, FormLogin
+from flask_sqlalchemy import SQLAlchemy
+from models import Usuario, Post
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -9,6 +11,9 @@ app = Flask(__name__)
 lista_usuarios = ['Lira', 'João', 'Alon', 'Alessandra', 'Amanda']
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///projetosite.db'
+
+database = SQLAlchemy(app)
 
 @app.route('/')
 def home():
