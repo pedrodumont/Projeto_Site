@@ -1,10 +1,17 @@
-from comunidadeimpressionadora import database
+from comunidadeimpressionadora import database, login_manager
 from datetime import datetime, timezone
+from flask_login import UserMixin
+
+
+@login_manager.user_loader
+def laod_usuario(id_usuario):
+    return Usuario.query.get(int(id_usuario))
 
 def get_utc_now():
     return datetime.now(timezone.utc)
 
-class Usuario(database.Model):
+
+class Usuario(database.Model, UserMixin):
     id = database.Column(database.Integer, primary_key=True)
     username = database.Column(database.String, nullable=False)
     email = database.Column(database.String, nullable=False, unique=True)
