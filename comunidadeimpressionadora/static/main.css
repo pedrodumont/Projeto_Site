@@ -36,3 +36,14 @@
 .number3 {
     font-weight: 500
 }
+
+.meupost {
+    background-color: #f2f5f8;
+}
+
+.post-date {
+    font-size: 12px;
+    font-style: italic;
+    text-align: right;
+    color: gray;
+}

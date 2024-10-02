@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from comunidadeimpressionadora.models import Usuario
+from flask_login import current_user
 # As validações são de preenchimento de formulário e não do envio das informações se o email e senha estão
 # cadastrados
 
@@ -22,4 +24,28 @@ class FormCriarConta(FlaskForm):
     def validate_email(self, email):
         usuario = Usuario.query.filter_by(email=email.data).first()
         if usuario:
-            raise ValidationError('E-mail ja cadastrado. Cadastre-se com outro e-mail o faça login para continuar.')
+            raise ValidationError('E-mail ja cadastrado. Cadastre-se com outro e-mail ou faça login para continuar.')
+        
+class FormEditarPerfil(FlaskForm):
+    username = StringField('Novo nome de Usuário', validators=[DataRequired()])
+    email = StringField('Novo e-mail', validators=[DataRequired(), Email()])
+    foto_perfil = FileField('Atualizar Foto de Perfil', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    curso_excel = BooleanField('Excel Impressionador')
+    curso_vba = BooleanField('VBA Impressionador')
+    curso_powerbi = BooleanField('Power BI Impressionador')
+    curso_python = BooleanField('Python Impressionador')
+    curso_ppt = BooleanField('Apresentações Impressionadoras')
+    curso_sql = BooleanField('SQL Impressionador')
+    botao_editarperfil = SubmitField('Salvar')
+ 
+    def validate_email(self, email):
+        if current_user.email != email.data:
+            usuario = Usuario.query.filter_by(email=email.data).first()
+            if usuario:
+                raise ValidationError('E-mail ja cadastrado por outro usuário. Utilize outro e-mail.')
+
+class FormCriarPost(FlaskForm):
+    titulo = StringField('Titulo do Post', validators=[DataRequired(), Length(2,140)])
+    corpo = TextAreaField('Escreva seu Post Aqui', validators=[DataRequired()])
+    botao_publicar = SubmitField('Criar Post')
+    
