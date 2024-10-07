@@ -18,10 +18,92 @@
                         </div>
                     </div>
                     <div class="col col-9">
-                        <h3>{{post.titulo}}</h3>
+                        <h3>{{post.titulo}}
+                            <small class="text-muted" style="font-size: 15px">
+                                {% if form %}
+                                    <a style="text-decoration: none" href="#form_editarpost"> - Editar</a> / 
+                                    <a class="text-danger" style="text-decoration: none" href="#" data-bs-toggle="modal" data-bs-target="#ExcluirPost">Excluir Post</a>
+                                {% endif %}
+                            </small>
+                        </h3>
                         <p>{{post.corpo}}</p>
                     </div>
+                    <p class="post-date" style="position: absolute; bottom: 0px; right: 5px; font-size: 12px; color: gray;">
+                        {{ formata_data(post.data_criacao)[0] }}
+                    </p>
+                    <p class="post-date" style="position: absolute; bottom: 15px; right: 5px; font-size: 12px; color: gray;">
+                        {{ formata_data(post.data_criacao)[1] }}
+                    </p>
                 </div>    
         </div>
 
+
+{% if form %}
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST" action="" id="form_editarpost" class="border p-4 mt-2">
+                    {{ form.csrf_token }}
+                    <legend>Editar Post</legend>
+                    <fieldset>
+                        <div class="form-group">
+                            {{ form.titulo.label(class="form-control-label") }}
+                            {% if form.titulo.errors %}
+                                {{ form.titulo(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for erro in form.titulo.errors %}
+                                    {{ erro }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                                {{ form.titulo(class="form-control") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.corpo.label(class="form-control-label") }}
+                            {% if form.corpo.errors %}
+                                {{ form.corpo(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for erro in form.corpo.errors %}
+                                    {{ erro }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                                {{ form.corpo(class="form-control") }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                        <div class="d-flex justify-content-between mt-3">
+                            {{ form.botao_publicar(class="btn btn-primary") }}
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="ExcluirPost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          Você quer realmente excluir este post? (Esta ação não pode ser desfeita!)
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <form method="post" action="{{ url_for('excluir_post', post_id=post.id) }}">
+                <button type="submit" class="btn btn-danger alert-danger">Excluir Post</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
 {% endblock %}

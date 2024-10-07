@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="col col-9">
-                        <a href="{{ url_for('exibir_post', post_id=post.id)}}"><h3>{{post.titulo}}</h3></a>
+                        <a style="text-decoration: none" href="{{ url_for('exibir_post', post_id=post.id) }}"><h3>{{post.titulo}}</h3></a>
                         <p>{{post.corpo}}</p>
                     </div>
                     <p class="post-date" style="position: absolute; bottom: 0px; right: 5px; font-size: 12px; color: gray;">
